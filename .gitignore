@@ -1,0 +1,90 @@
+# directory
+xtests
+test
+lib
+
+# Compiled Object files
+*.o
+*.slo
+*.lo
+*.ko
+*.obj
+*.elf
+*.d
+*.sho
+
+# Precompiled Headers
+*.in
+*.gch
+*.pch
+
+# Compiled libraries
+*.dylib
+*.dll
+*.so
+*.lib
+*.a
+*.la
+*.lo
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Fortran module files
+*.mod
+
+# vcxproj
+*.opensdf
+*.sdf
+*.suo
+GeneratedFiles
+ipch
+x64
+
+# CMake
+build
+Makefile*
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+install_manifest.txt
+
+# Qt
+debug
+release
+.qmake.stash
+moc_*
+*.Debug
+*.Release
+*.pro.user*
+
+# vcxproj
+*.opensdf
+*.sdf
+*.suo
+GeneratedFiles
+ipch
+
+#vxworks
+PPC32e500v2*
+
+# DDS
+*.log.*
+*.tlog
+
+# bin
+bin
+install
+ffmpeg
+ffmpeg_g
+ffplay
+ffplay_g
+ffprobe
+ffprobe_g
+resource
+
+# ide
+.vscode

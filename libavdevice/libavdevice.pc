@@ -1,0 +1,14 @@
+prefix=/home/quhan/01_myProject/ffmpeg-6.1.3/install
+exec_prefix=${prefix}
+libdir=/home/quhan/01_myProject/ffmpeg-6.1.3/install/lib
+includedir=/home/quhan/01_myProject/ffmpeg-6.1.3/install/include
+
+Name: libavdevice
+Description: FFmpeg device handling library
+Version: 60.3.100
+Requires: libavfilter >= 9.12.100, libswscale >= 7.5.100, libpostproc >= 57.3.100, libavformat >= 60.16.100, libavcodec >= 60.31.102, libswresample >= 4.12.100, libavutil >= 58.29.100
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavdevice -lm -latomic -lopenal -lxcb -lxcb-shm -lxcb-shape -lxcb-xfixes -lasound -lSDL2 -lsndio -lXv -lX11 -lXext
+Libs.private: 
+Cflags: -I${includedir}

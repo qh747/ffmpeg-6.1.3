@@ -1,0 +1,14 @@
+prefix=/home/quhan/01_myProject/ffmpeg-6.1.3/install
+exec_prefix=${prefix}
+libdir=/home/quhan/01_myProject/ffmpeg-6.1.3/install/lib
+includedir=/home/quhan/01_myProject/ffmpeg-6.1.3/install/include
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 58.29.100
+Requires: 
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavutil -pthread -lva-drm -lva -lva-x11 -lva -lvdpau -lX11 -lm -lssl -lcrypto -lva -latomic -lX11
+Libs.private: 
+Cflags: -I${includedir}
