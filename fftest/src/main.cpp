@@ -1,4 +1,5 @@
 #include "testAvLog.h"
+#include "testAvParseUtil.h"
 #include "testAvDictionary.h"
 
 // 测试av_log功能
@@ -13,10 +14,22 @@ void FuncTestAvLog() {
 // 测试AVDictionary功能
 void FuncTestAVDictionary() {
     // 测试字典基本功能
-    // TEST_AV_DICTIONARY::TestDictionaryBasic();
+    TEST_AV_DICTIONARY::TestDictionaryBasic();
 
     // 测试字典遍历功能
     TEST_AV_DICTIONARY::TestDictionaryForeach();
+}
+
+// 测试AVParseUtil功能
+void FuncTestAVParseUtil() {
+    // 测试视频分辨率解析功能
+    // TEST_AV_PARSE_UTIL::TestParseVideoSize();
+
+    // 测试视频帧率解析功能
+    // TEST_AV_PARSE_UTIL::TestParseVideoRate();
+
+    // 测试时间解析功能
+    TEST_AV_PARSE_UTIL::TestParseTime();
 }
 
 int main() { 
@@ -24,7 +37,10 @@ int main() {
     // FuncTestAvLog();
 
     // 测试AVDictionary功能
-    FuncTestAVDictionary();
+    // FuncTestAVDictionary();
+
+    // 测试AVParseUtil功能
+    FuncTestAVParseUtil();
 
     return 0;
 }
