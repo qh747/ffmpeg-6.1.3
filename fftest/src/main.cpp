@@ -1,16 +1,30 @@
 #include "testAvLog.h"
+#include "testAvDictionary.h"
 
 // 测试av_log功能
 void FuncTestAvLog() {
     // 测试日志输出基本功能
-    // TEST_AV_LOG::TestLogOutputBasic();
+    TEST_AV_LOG::TestLogOutputBasic();
 
     // 测试设置日志输出级别功能
     TEST_AV_LOG::TestSetLogLevel();
 }
 
+// 测试AVDictionary功能
+void FuncTestAVDictionary() {
+    // 测试字典基本功能
+    // TEST_AV_DICTIONARY::TestDictionaryBasic();
+
+    // 测试字典遍历功能
+    TEST_AV_DICTIONARY::TestDictionaryForeach();
+}
+
 int main() { 
-    FuncTestAvLog();
+    // 测试av_log功能
+    // FuncTestAvLog();
+
+    // 测试AVDictionary功能
+    FuncTestAVDictionary();
 
     return 0;
 }

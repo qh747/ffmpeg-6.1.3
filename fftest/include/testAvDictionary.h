@@ -2,10 +2,10 @@
 
 namespace TEST_AV_DICTIONARY { 
 
-// 测试日志输出基本功能
-void TestLogOutputBasic();
+// 测试字典基本功能
+void TestDictionaryBasic();
 
-// 测试设置日志输出级别功能
-void TestSetLogLevel();
+// 测试字典遍历功能
+void TestDictionaryForeach();
 
 }; // namespace TEST_AV_DICTIONARY

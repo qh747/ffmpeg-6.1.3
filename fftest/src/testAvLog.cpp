@@ -1,7 +1,4 @@
 #include <string>
-#include <memory>
-#include <vector>
-#include <cstdio>
 #include <functional>
 
 extern "C" {
