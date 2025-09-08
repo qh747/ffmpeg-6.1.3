@@ -1,4 +1,5 @@
 #include "testAvLog.h"
+#include "testAvIO.h"
 #include "testAvParseUtil.h"
 #include "testAvDictionary.h"
 
@@ -23,13 +24,25 @@ void FuncTestAVDictionary() {
 // 测试AVParseUtil功能
 void FuncTestAVParseUtil() {
     // 测试视频分辨率解析功能
-    // TEST_AV_PARSE_UTIL::TestParseVideoSize();
+    TEST_AV_PARSE_UTIL::TestParseVideoSize();
 
     // 测试视频帧率解析功能
-    // TEST_AV_PARSE_UTIL::TestParseVideoRate();
+    TEST_AV_PARSE_UTIL::TestParseVideoRate();
 
     // 测试时间解析功能
     TEST_AV_PARSE_UTIL::TestParseTime();
+}
+
+// 测试AVIO功能
+void FuncTestAVIO() {
+    // 测试打开mp4文件功能
+    // TEST_AV_IO::TestOpenMp4File();
+
+    // 测试打开rtsp流功能
+    // TEST_AV_IO::TestOpenRtspStream();
+
+    // 测试打开自定义I/O
+    TEST_AV_IO::TestOpenSelfDefineIO();
 }
 
 int main() { 
@@ -40,7 +53,10 @@ int main() {
     // FuncTestAVDictionary();
 
     // 测试AVParseUtil功能
-    FuncTestAVParseUtil();
+    // FuncTestAVParseUtil();
+
+    // 测试AVIO功能
+    FuncTestAVIO();
 
     return 0;
 }
