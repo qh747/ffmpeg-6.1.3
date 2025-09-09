@@ -98,8 +98,6 @@ void TestOpenSelfDefineIO() {
     std::size_t size = 4096;
     uint8_t* buf = static_cast<uint8_t*>(av_malloc(size));
 
-    std::unique_ptr<uint8_t, decltype(freeBufCb)> bufGuard(buf, freeBufCb);
-
     AVIOContext*     ioCtx    = nullptr;
     AVFormatContext* fmtCtx   = nullptr;
     AVInputFormat*   inFmtCtx = nullptr;

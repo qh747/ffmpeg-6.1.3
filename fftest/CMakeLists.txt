@@ -13,6 +13,8 @@ set(CMAKE_BUILD_TYPE Debug)
 # 设置C++标准
 set(CMAKE_CXX_STANDARD 11)
 
+add_definitions(-D__STDC_CONSTANT_MACROS)
+
 # 设置ffmpeg库路径
 set(FFMPEG_ROOT_PATH ${CMAKE_SOURCE_DIR}/../install)
 set(FFMPEG_HEAD_PATH ${FFMPEG_ROOT_PATH}/include)
