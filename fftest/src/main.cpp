@@ -49,7 +49,10 @@ void FuncTestAVIO() {
 // 测试AVFormat功能
 void FuncTestAVFormat() {
     // 测试显示流信息功能
-    TEST_AV_FORMAT::TestShowStreamInfo();
+    // TEST_AV_FORMAT::TestShowStreamInfo();
+
+    // 测试输出文件的前100条帧信息
+    TEST_AV_FORMAT::TestShowFstHundredFrames();
 }
 
 int main() { 
