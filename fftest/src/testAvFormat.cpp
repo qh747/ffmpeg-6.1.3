@@ -249,4 +249,180 @@ void TestShowFstHundredFrames() {
     avformat_close_input(&fmtCtx);
 }
 
+// 测试将mp4文件重新解封装/封装为flv文件
+void TestRemuxMp4ToFlv() {
+    // 输入/输出文件
+    std::string inFile  = "../../resource/video1.mp4";
+    std::string outFile = "./output.flv";
+
+    AVFormatContext* inFmtCtx = nullptr;
+    AVInputFormat*   inFmt    = nullptr;
+
+    AVFormatContext* outFmtCtx = nullptr;
+
+    char errBuf[1024] = "0";
+
+    do {
+        // 打开输入文件并获取媒体流信息
+        int ret = avformat_open_input(&inFmtCtx, inFile.c_str(), inFmt, nullptr);
+        if (0 != ret) {
+            av_strerror(ret, errBuf, sizeof(errBuf));
+            av_log(inFmtCtx, AV_LOG_ERROR, "avformat_open_input() failed. err info: %s\n", errBuf);
+            break;
+        }
+
+        ret = avformat_find_stream_info(inFmtCtx, nullptr);
+        if (ret < 0) {
+            av_strerror(ret, errBuf, sizeof(errBuf));
+            av_log(inFmtCtx, AV_LOG_ERROR, "avformat_find_stream_info() failed. err info: %s\n", errBuf);
+            break;
+        }
+
+        av_log(inFmtCtx, AV_LOG_INFO, "Open input file success. name: %s\n", inFile.c_str());
+        TEST_AV_FORMAT_FUNC::FuncPrintBasicStreamInfo(inFmtCtx);
+
+        // 创建输出文件上下文信息
+        ret = avformat_alloc_output_context2(&outFmtCtx, nullptr, nullptr, outFile.c_str());
+        if (ret < 0) {
+            av_strerror(ret, errBuf, sizeof(errBuf));
+            av_log(outFmtCtx, AV_LOG_ERROR, "avformat_alloc_output_context2() failed. err info: %s\n", errBuf);
+            break;
+        }
+
+        // 赋值输出文件上下文信息媒体参数
+        int  audioIdx = -1;
+        int  videoIdx = -1;
+        bool hasError = false;
+
+        for (int idx = 0; idx < inFmtCtx->nb_streams; ++idx) {
+            AVStream* inStream = inFmtCtx->streams[idx];
+
+            // 赋值媒体流索引
+            if (AVMEDIA_TYPE_AUDIO == inStream->codecpar->codec_type) {
+                audioIdx = inStream->index;
+            }
+            else if (AVMEDIA_TYPE_VIDEO == inStream->codecpar->codec_type) {
+                videoIdx = inStream->index;
+            }
+            else {
+                continue;
+            }
+
+            // 创建媒体流
+            AVStream* outStream = avformat_new_stream(outFmtCtx, nullptr);
+            if (nullptr == outStream) {
+                av_log(outFmtCtx, AV_LOG_ERROR, "avformat_new_stream() failed. codec type: %s\n", 
+                    av_get_media_type_string(inStream->codecpar->codec_type));
+                
+                hasError = true;
+                break;
+            }
+
+            // 赋值编解码参数
+            ret = avcodec_parameters_copy(outStream->codecpar, inStream->codecpar);
+            if (ret < 0) {
+                av_strerror(ret, errBuf, sizeof(errBuf));
+                av_log(outFmtCtx, AV_LOG_ERROR, "avcodec_parameters_copy() failed. err info: %s\n", errBuf);
+
+                hasError = true;
+                break;
+            }
+
+            outStream->codecpar->codec_tag = 0;
+        }
+
+        if (hasError) {
+            break;
+        }
+
+        // 打开输出文件
+        ret = avio_open(&outFmtCtx->pb, outFile.c_str(), AVIO_FLAG_WRITE);
+        if (ret < 0) {
+            av_strerror(ret, errBuf, sizeof(errBuf));
+            av_log(outFmtCtx, AV_LOG_ERROR, "avio_open() failed. err info: %s\n", errBuf);
+            break;
+        }
+
+        av_log(outFmtCtx, AV_LOG_INFO, "Create output file success. name: %s\n", outFile.c_str());
+        TEST_AV_FORMAT_FUNC::FuncPrintBasicStreamInfo(outFmtCtx);
+
+        // 写输出文件首部信息
+        ret = avformat_write_header(outFmtCtx, nullptr);
+        if (ret < 0) {
+            av_strerror(ret, errBuf, sizeof(errBuf));
+            av_log(outFmtCtx, AV_LOG_ERROR, "avformat_write_header() failed. err info: %s\n", errBuf);
+            break;
+        }
+
+        // 写输出文件内容
+        AVPacket* pkt = av_packet_alloc();
+
+        while (true) {
+            // 读取一帧数据
+            ret = av_read_frame(inFmtCtx, pkt);
+            if (ret < 0) {
+                if (AVERROR_EOF == ret) {
+                    av_log(outFmtCtx, AV_LOG_INFO, "Reach file end.\n");
+                }
+                else {
+                    av_strerror(ret, errBuf, sizeof(errBuf));
+                    av_log(outFmtCtx, AV_LOG_ERROR, "av_read_frame() failed. err code: %d, err info: %s\n", ret, errBuf);
+                }
+
+                break;
+            }
+
+            // 当前帧是音频或视频数据
+            if ((-1 != audioIdx && audioIdx == pkt->stream_index) || (-1 != videoIdx && videoIdx == pkt->stream_index)) {
+                AVStream* inStream  = inFmtCtx->streams[pkt->stream_index];
+                AVStream* outStream = outFmtCtx->streams[pkt->stream_index];
+
+                // 帧时间戳转换
+                pkt->duration = av_rescale_q(pkt->duration, inStream->time_base, outStream->time_base);
+
+                pkt->pts = av_rescale_q_rnd(pkt->pts, inStream->time_base, outStream->time_base, 
+                    static_cast<AVRounding>(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
+                    
+                pkt->dts = av_rescale_q_rnd(pkt->dts, inStream->time_base, outStream->time_base, 
+                    static_cast<AVRounding>(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
+
+                // 输出写入的帧信息
+                if (audioIdx == pkt->stream_index) {
+                    TEST_AV_FORMAT_FUNC::FuncPrintAudioFrame(outFmtCtx, outStream, pkt);
+                }
+                else {
+                    TEST_AV_FORMAT_FUNC::FuncPrintVideoFrame(outFmtCtx, outStream, pkt);
+                }
+
+                // 写入一帧数据
+                ret = av_interleaved_write_frame(outFmtCtx, pkt);
+                if (0 != ret) {
+                    av_strerror(ret, errBuf, sizeof(errBuf));
+                    av_log(outFmtCtx, AV_LOG_ERROR, "av_interleaved_write_frame() failed. err info: %s\n", errBuf);
+                    break;
+                }
+            }
+
+            av_packet_unref(pkt);
+        }
+
+        av_packet_free(&pkt);
+
+        // 写输出文件尾部信息
+        ret = av_write_trailer(outFmtCtx);
+        if (ret < 0) {
+            av_strerror(ret, errBuf, sizeof(errBuf));
+            av_log(outFmtCtx, AV_LOG_ERROR, "av_write_trailer() failed. err info: %s\n", errBuf);
+        }
+
+    } while(false);
+    
+    // 输出资源释放
+    avio_closep(&outFmtCtx->pb);
+    avformat_free_context(outFmtCtx);
+
+    // 输入资源释放
+    avformat_close_input(&inFmtCtx);
+}
+
 } // namespace TEST_AV_FORMAT
