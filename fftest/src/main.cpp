@@ -1,5 +1,6 @@
 #include "testAvIO.h"
 #include "testAvLog.h"
+#include "testAvCodec.h"
 #include "testAvFormat.h"
 #include "testAvParseUtil.h"
 #include "testAvDictionary.h"
@@ -49,13 +50,19 @@ void FuncTestAVIO() {
 // 测试AVFormat功能
 void FuncTestAVFormat() {
     // 测试显示流信息功能
-    // TEST_AV_FORMAT::TestShowStreamInfo();
+    TEST_AV_FORMAT::TestShowStreamInfo();
 
     // 测试输出文件的前100条帧信息
-    // TEST_AV_FORMAT::TestShowFstHundredFrames();
+    TEST_AV_FORMAT::TestShowFstHundredFrames();
 
     // 测试将mp4文件重新解封装/封装为flv文件
     TEST_AV_FORMAT::TestRemuxMp4ToFlv();
+}
+
+// 测试AVCodec功能
+void FuncTestAVCodec() { 
+    // 测试编码随机数
+    TEST_AV_CODEC::TestEncodeRandom();
 }
 
 int main() { 
@@ -72,7 +79,10 @@ int main() {
     // FuncTestAVIO();
 
     // 测试AVFormat功能
-    FuncTestAVFormat();
+    // FuncTestAVFormat();
+
+    // 测试AVCodec功能
+    FuncTestAVCodec();
 
     return 0;
 }
