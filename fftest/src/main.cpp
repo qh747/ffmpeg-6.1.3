@@ -61,8 +61,11 @@ void FuncTestAVFormat() {
 
 // 测试AVCodec功能
 void FuncTestAVCodec() { 
-    // 测试编码随机数
-    TEST_AV_CODEC::TestEncodeRandom();
+    // 测试编码
+    // TEST_AV_CODEC::TestEncode();
+
+    // 测试解码
+    TEST_AV_CODEC::TestDecode();
 }
 
 int main() { 
