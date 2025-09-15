@@ -192,7 +192,9 @@ static int FuncDecode(const AVPacket* inPkt,
     while (true) {
         // 从解码器中获取解码后的数据
         ret = avcodec_receive_frame(outDecCtx, outFrame);
+
         if (ret < 0) {
+            // 解码失败
             if (ret == AVERROR(EAGAIN)) {
                 av_log(nullptr, AV_LOG_WARNING, "Not enough packets for output frame from decoder.\n");
                 break;
@@ -207,10 +209,11 @@ static int FuncDecode(const AVPacket* inPkt,
 
             return ret;
         }
-
-        // 将解码后的原始数据写入文件
-        if (nullptr != outFileCb) {
-            outFileCb(outFrame);
+        else {
+            // 将解码后的原始数据写入文件
+            if (nullptr != outFileCb) {
+                outFileCb(outFrame);
+            }
         }
 
         av_frame_unref(outFrame);
@@ -523,11 +526,8 @@ void TestDecode() {
                 av_log(nullptr, AV_LOG_INFO, "Write video file. count: %d. codec: %c\n", 
                     ++outCtx->outVideoFileWriteCount, av_get_picture_type_char(outFrame->pict_type));
 
-                uint8_t* srcOutBufferFstPos = reinterpret_cast<uint8_t*>(outFrame->data[0]);
-                const uint8_t** srcOutBuffer = reinterpret_cast<const uint8_t**>(srcOutBufferFstPos);
-
-                uint8_t* dstOutBufferFstPos = reinterpret_cast<uint8_t*>(outCtx->outVideoImageBuffer[0]);
-                uint8_t** dstOutBuffer = reinterpret_cast<uint8_t**>(dstOutBufferFstPos);
+                uint8_t** srcOutBuffer = reinterpret_cast<uint8_t**>(outFrame->data);
+                uint8_t** dstOutBuffer = reinterpret_cast<uint8_t**>(outCtx->outVideoImageBuffer);
 
                 av_image_copy(
                     dstOutBuffer, outCtx->outVideoImageLineSize,
