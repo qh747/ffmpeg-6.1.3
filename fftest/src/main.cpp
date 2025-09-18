@@ -2,6 +2,7 @@
 #include "testAvLog.h"
 #include "testAvCodec.h"
 #include "testAvFormat.h"
+#include "testAvFilter.h"
 #include "testAvParseUtil.h"
 #include "testAvDictionary.h"
 
@@ -68,6 +69,12 @@ void FuncTestAVCodec() {
     TEST_AV_CODEC::TestDecode();
 }
 
+// 测试AVFilter功能
+void FuncTestAVFilter() { 
+    // 测试过滤器基本功能
+    TEST_AV_FILTER::TestFilterBasic();
+}
+
 int main() { 
     // 测试av_log功能
     // FuncTestAvLog();
@@ -85,7 +92,10 @@ int main() {
     // FuncTestAVFormat();
 
     // 测试AVCodec功能
-    FuncTestAVCodec();
+    // FuncTestAVCodec();
+
+    // 测试AVFilter功能
+    FuncTestAVFilter();
 
     return 0;
 }
