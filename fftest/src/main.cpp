@@ -1,5 +1,6 @@
 #include "testAvIO.h"
 #include "testAvLog.h"
+#include "testAvPush.h"
 #include "testAvCodec.h"
 #include "testAvFormat.h"
 #include "testAvFilter.h"
@@ -75,6 +76,12 @@ void FuncTestAVFilter() {
     TEST_AV_FILTER::TestFilterBasic();
 }
 
+// 测试AVPush功能
+void FuncTestAVPush() { 
+    // 测试Rtsp推流
+    TEST_AV_PUSH::TestRtspPush();
+}
+
 int main() { 
     // 测试av_log功能
     // FuncTestAvLog();
@@ -95,7 +102,10 @@ int main() {
     // FuncTestAVCodec();
 
     // 测试AVFilter功能
-    FuncTestAVFilter();
+    // FuncTestAVFilter();
+
+    // 测试AVPush功能
+    FuncTestAVPush();
 
     return 0;
 }
