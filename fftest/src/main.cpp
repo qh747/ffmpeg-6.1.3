@@ -1,5 +1,6 @@
 #include "testAvIO.h"
 #include "testAvLog.h"
+#include "testAvInfo.h"
 #include "testAvPush.h"
 #include "testAvCodec.h"
 #include "testAvFormat.h"
@@ -14,6 +15,12 @@ void FuncTestAvLog() {
 
     // 测试设置日志输出级别功能
     TEST_AV_LOG::TestSetLogLevel();
+}
+
+// 测试AVInfo功能
+void FuncTestAVInfo() {
+    // 测试打印流信息功能
+    TEST_AV_INFO::TestPrintStreamInfo();
 }
 
 // 测试AVDictionary功能
@@ -86,6 +93,9 @@ int main() {
     // 测试av_log功能
     // FuncTestAvLog();
 
+    // 测试AVInfo功能
+    FuncTestAVInfo();
+
     // 测试AVDictionary功能
     // FuncTestAVDictionary();
 
@@ -105,7 +115,7 @@ int main() {
     // FuncTestAVFilter();
 
     // 测试AVPush功能
-    FuncTestAVPush();
+    // FuncTestAVPush();
 
     return 0;
 }
